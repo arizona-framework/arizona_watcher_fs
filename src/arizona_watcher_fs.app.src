@@ -1,0 +1,23 @@
+{application, arizona_watcher_fs, [
+    {description, "fs-based file watcher for the Arizona dev reloader"},
+    {vsn, semver},
+    {registered, []},
+    %% Neither arizona nor fs is listed. Nothing here runs at boot: the module is
+    %% a callback arizona's reloader calls, so arizona needs no starting on its
+    %% behalf. And starting the fs application runs its default recursive
+    %% watcher on the node's working directory; `fs:start_link/2` starts the
+    %% named watch this package needs without it.
+    {applications, [
+        kernel,
+        stdlib
+    ]},
+    {env, []},
+    {modules, []},
+    {licenses, ["Apache-2.0"]},
+    {links, [
+        {"GitHub", "https://github.com/arizona-framework/arizona_watcher_fs"},
+        {"Docs", "https://hexdocs.pm/arizona_watcher_fs"},
+        {"Issues", "https://github.com/arizona-framework/arizona_watcher_fs/issues"},
+        {"Arizona", "https://github.com/arizona-framework/arizona"}
+    ]}
+]}.
