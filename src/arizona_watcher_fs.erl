@@ -40,8 +40,8 @@ name is an atom derived from the calling process and the directory) whose
 supervisor is linked to the calling rule process, so a crashing watch stops
 the rule and its supervisor restarts it. `fs` runs an OS process (`sh` + `inotifywait` on
 Linux) with the watched directory as its cwd; `terminate/1` shuts the instance
-down and waits briefly for that process, so a caller that deletes the watched
-directory right after does not race its `getcwd`.
+down and waits for it, so a caller that deletes the watched directory right
+after does not race its `getcwd`.
 
 The `fs` application itself is never started: its default env starts a
 recursive watcher on the node's working directory. That is why `fs` is a
@@ -110,19 +110,13 @@ handle_info(_Info, State) ->
     State :: state().
 terminate(#{sup := Sup}) ->
     Ref = monitor(process, Sup),
-    unlink(Sup),
     exit(Sup, shutdown),
-    %% Both waits stay inside the rule process's 5 s shutdown timeout. An
-    %% already-dead supervisor (the rule stopping because it crashed) answers the
-    %% monitor with `noproc` at once.
+    %% No timeout of its own: the rule process's shutdown timeout bounds this
+    %% wait, and if it expires the rule is killed and the link takes the watch
+    %% down with it. An already-dead supervisor (the rule stopping because the
+    %% watch crashed) answers the monitor with `noproc` at once.
     receive
         {'DOWN', Ref, process, Sup, _} -> ok
-    after 3000 ->
-        exit(Sup, kill),
-        receive
-            {'DOWN', Ref, process, Sup, _} -> ok
-        after 1000 -> ok
-        end
     end,
     %% port_close sends SIGHUP but the OS process may still be exiting. Give it
     %% a moment so a caller that deletes the watched directory doesn't race with
