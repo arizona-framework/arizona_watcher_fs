@@ -21,7 +21,8 @@ Add it to a dev-only profile in your `rebar.config`, so a production release nev
 ]}.
 ```
 
-On Linux, `fs` needs `inotifywait` (the `inotify-tools` package).
+It needs Arizona 0.4 or newer, the first release with the `arizona_watcher` behaviour. On Linux,
+`fs` needs `inotifywait` (the `inotify-tools` package).
 
 ## Usage
 
