@@ -16,7 +16,7 @@ Add it to a dev-only profile in your `rebar.config`, so a production release nev
 ```erlang
 {profiles, [
     {dev, [
-        {deps, [{arizona_watcher_fs, "~> 0.1"}]}
+        {deps, [arizona_watcher_fs]}
     ]}
 ]}.
 ```
@@ -67,7 +67,7 @@ started:
 ```erlang
 {profiles, [
     {dev, [
-        {deps, [{arizona_watcher_fs, "~> 0.1"}]},
+        {deps, [arizona_watcher_fs]},
         {relx, [{release, {my_app, "0.1.0"}, [my_app, {arizona_watcher_fs, load}, {fs, load}]}]}
     ]}
 ]}.
