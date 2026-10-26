@@ -16,12 +16,13 @@ Add it to a dev-only profile in your `rebar.config`, so a production release nev
 ```erlang
 {profiles, [
     {dev, [
-        {deps, [arizona_watcher_fs]}
+        {deps, [{arizona_watcher_fs, "~> 0.1"}]}
     ]}
 ]}.
 ```
 
-On Linux, `fs` needs `inotifywait` (the `inotify-tools` package).
+It needs Arizona 0.4 or newer, the first release with the `arizona_watcher` behaviour. On Linux,
+`fs` needs `inotifywait` (the `inotify-tools` package).
 
 ## Usage
 
@@ -66,7 +67,7 @@ started:
 ```erlang
 {profiles, [
     {dev, [
-        {deps, [arizona_watcher_fs]},
+        {deps, [{arizona_watcher_fs, "~> 0.1"}]},
         {relx, [{release, {my_app, "0.1.0"}, [my_app, {arizona_watcher_fs, load}, {fs, load}]}]}
     ]}
 ]}.
